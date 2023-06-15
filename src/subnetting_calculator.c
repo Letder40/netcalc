@@ -102,7 +102,6 @@ int** get_ip(){
     while (1) {
         
         octet_ptr = &octets[octet_index];
-        int counter = octet_ptr->counter;
 
         digit = getchar();
 
@@ -112,28 +111,26 @@ int** get_ip(){
         }
 
         // breaking ip address to another octect when the digit is equal to 46 ('.') decimal representation in ascii
-
         if (digit == '.') {
             octet_index++;
             continue;
         }
 
         // Getting real int 
-
         digit = digit - '0';
-
-        if (octet_ptr->counter > 2 || octet_index > 3) {
-            printf("[!] invalid IP address -> greeter value than 255\n");
-            exit(1);
-        }
 
         if (digit < 0 || digit > 9) {
             printf("[!] invalid IP address -> not a valid digit\n");
             exit(1);
         }
         
-        octet_ptr->digits[counter] = digit;
+        octet_ptr->digits[octet_ptr->counter] = digit;
         octet_ptr->counter++;
+
+        if (octet_ptr->counter > 3) {
+            printf("[!] invalid IP address -> greeter value than 255\n");
+            exit(1);
+        }
     }
 
 
@@ -189,21 +186,21 @@ int main() {
 
     // Checking if netmask is a valid one
 
-    int state = 1;
-    int state_change = 0;
+    int bit_change = 1;
+    int bit_change_counter = 0;
     for (int x=0; x<4; x++){
         for (int i=0; i<8; i++){
-            if (state == 1 && netmask_bits[x][i] == 0) {
-                state = 0;
-                state_change ++;
-            }else if(state == 0 && netmask_bits[x][i] == 1){
-                state=1;
-                state_change++;
+            if (bit_change == 1 && netmask_bits[x][i] == 0) {
+                bit_change = 0;
+                bit_change_counter ++;
+            }else if(bit_change == 0 && netmask_bits[x][i] == 1){
+                bit_change=1;
+                bit_change_counter++;
             }
         }
     }
 
-    if (state_change > 1){
+    if (bit_change_counter > 1){
         printf("[!] Invalid network mask\n");
         return 1;
     }

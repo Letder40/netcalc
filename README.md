@@ -8,5 +8,13 @@ I am a terminal lover, and I like to create terminal software to make my work ea
 
 ![demo](media/demo.png)
 
+## How to compile it?
+You will need to link the math library, the rest is a normal compilation
+**Example:**
+
+```bash
+gcc subnetting_calculator.c -o sn_calc -lm
+```
+
 **If you find any bug or any part of the code can be wrote in a more correct way pls let me know :)**
 
