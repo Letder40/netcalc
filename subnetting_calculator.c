@@ -2,6 +2,84 @@
 #include <stdio.h>
 #include <math.h>
 
+void print_network_range(int decimal_network_identifier[4], int decimal_broadcast_identifier[4]){
+    for (int i=0; i<4; i++){
+            if ( i == 3){
+                printf("%d", decimal_network_identifier[i] + 1);
+            }else{
+                printf("%d", decimal_network_identifier[i]);
+                printf(".");
+            }
+        }
+        printf(" - ");
+        for (int i=0; i<4; i++){
+            if ( i == 3){
+                printf("%d", decimal_broadcast_identifier[i] - 1);
+            }else{
+                printf("%d", decimal_network_identifier[i]);
+                printf(".");
+            }
+        }
+        printf("\n");
+}
+
+void free_multiarray(int** array){
+    for (int i = 0; i<4; i++){
+        free(array[i]);
+    }
+    free(array);
+}
+
+void print_binary_representations_ptr(char* header, int** bits){
+    printf("%s", header);
+        for (int x=0; x<4; x++){
+            for (int i=0; i<8; i++){
+            printf("%d", bits[x][i]);
+            }
+        }
+        printf("\n");
+    free_multiarray(bits);
+}
+
+void print_binary_representations(char* header, int bits[4][8]){
+    printf("%s", header);
+        for (int x=0; x<4; x++){
+            for (int i=0; i<8; i++){
+            printf("%d", bits[x][i]);
+            }
+        }
+        printf("\n");
+}
+
+void print_identifiers(char* header, int* decimal_address){
+    printf("%s", header);
+        for (int i=0; i<4; i++){
+            printf("%d", decimal_address[i]);
+            if (i != 3) {
+                printf(".");
+            }
+        }
+        printf("\n");
+}
+
+int* decimal_of_ip(int bytes[4][8]){
+    int *digits = malloc(sizeof(int) * 4);
+    int counter = 0;
+    for (int x=0; x<4; x++){
+        digits[x] = 0;
+        int counter = 0;
+        for (int i=7; i>=0; i--){
+            if (bytes[x][counter] == 0){
+                counter++;
+                continue;
+            }
+            digits[x] += pow(2, i); 
+            counter++;
+        }
+    }
+    return digits;
+}
+
 int** get_ip(){
     int digit;
     int octet_index = 0;
@@ -130,7 +208,7 @@ int main() {
         return 1;
     }
 
-    // And operation network mask and ip address to get network identifier
+    // And operation: network mask and ip address to get network identifier
 
     int network_identifier[4][8];
     for (int x=0; x<4; x++){
@@ -139,7 +217,7 @@ int main() {
         }
     }
 
-    // Or operation negated network mask or ip address to get broadcast identifier
+    // Or operation: negated network mask or ip address to get broadcast identifier
 
     int broadcast_identifier[4][8];
     for (int x=0; x<4; x++){
@@ -152,110 +230,28 @@ int main() {
 
     printf("\n[ Binary representation ] \n");
 
-    printf("[#] ip address            ");
-    for (int x=0; x<4; x++){
-        for (int i=0; i<8; i++){
-        printf("%d", ip_bits[x][i]);
-        }
-    }
-    printf("\n");
-    free(ip_bits);
-
-    printf("[#] network mask          ");
-    for (int x=0; x<4; x++){
-        for (int i=0; i<8; i++){
-        printf("%d", netmask_bits[x][i]);  
-        }
-    }
-    printf("\n");
-    free(netmask_bits);
-
-    printf("[#] network identifier    ");
-    for (int x=0; x<4; x++){
-        for (int i=0; i<8; i++){
-        printf("%d", network_identifier[x][i]);
-        }
-    }
-    printf("\n");
-
-    printf("[#] broadcast identifier  ");
-    for (int x=0; x<4; x++){
-        for (int i=0; i<8; i++){
-        printf("%d", broadcast_identifier[x][i]);
-        }
-    }
-    printf("\n");
+    print_binary_representations_ptr("[#] ip address            ", ip_bits);
+    print_binary_representations_ptr("[#] network mask          ", netmask_bits);
+    print_binary_representations("[#] network identifier      ", network_identifier);
+    print_binary_representations("[#] broadcast identifier     ", broadcast_identifier);
 
     // Getting decimal representation of network identifier, and broadcast identifier
 
-    int decimal_network_identifier[4], decimal_broadcast_identifier[4];
-    for (int x=0; x<4; x++){
-        decimal_network_identifier[x] = 0;
-        int counter = 0;
-        for (int i=7; i>=0; i--){
-            if (network_identifier[x][counter] == 0){
-                counter++;
-                continue;
-            }
-            decimal_network_identifier[x] += pow(2, i); 
-            counter++;
-        }
-    }
-
-    for (int x=0; x<4; x++){
-        decimal_broadcast_identifier[x] = 0;
-        int counter = 0;
-        for (int i=7; i>=0; i--){
-            if (broadcast_identifier[x][counter] == 0){
-                counter++;
-                continue;
-            }
-            decimal_broadcast_identifier[x] += pow(2, i); 
-            counter++;
-        }
-    }
+    int* decimal_network_identifier = decimal_of_ip(network_identifier);
+    int* decimal_broadcast_identifier = decimal_of_ip(broadcast_identifier);
 
     // Printing decimal representation
 
     printf("\n[ Decimal representation ] \n");
 
-    printf("[#] network identifier    ");
-    for (int i=0; i<4; i++){
-        printf("%d", decimal_network_identifier[i]);
-        if (i != 3) {
-            printf(".");
-        }
-    }
-    printf("\n");
+    print_identifiers("[#] network identifier   ", decimal_network_identifier);
+    print_identifiers("[#] broadcast identifier  ", decimal_broadcast_identifier);
 
-    printf("[#] broadcast identifier  ");
-    for (int i=0; i<4; i++){
-        printf("%d", decimal_broadcast_identifier[i]);
-        if (i != 3) {
-            printf(".");
-        }
-    }
+    // printing network range
+    
+    printf("\n[ Network valid range] \n[#] ");
 
-    printf("\n\n[ Network valid range] \n[#] ");
-
-    for (int i=0; i<4; i++){
-        if ( i == 3){
-            printf("%d", decimal_network_identifier[i] + 1);
-        }else{
-            printf("%d", decimal_network_identifier[i]);
-            printf(".");
-        }
-    }
-    printf(" - ");
-    for (int i=0; i<4; i++){
-        if ( i == 3){
-            printf("%d", decimal_broadcast_identifier[i] - 1);
-        }else{
-            printf("%d", decimal_network_identifier[i]);
-            printf(".");
-        }
-    }
-    printf("\n");
+    print_network_range(decimal_network_identifier, decimal_broadcast_identifier);
 
     return 0;
 
