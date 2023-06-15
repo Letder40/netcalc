@@ -235,6 +235,26 @@ int main() {
             printf(".");
         }
     }
+
+    printf("\n\n[ Network valid range] \n[#] ");
+
+    for (int i=0; i<4; i++){
+        if ( i == 3){
+            printf("%d", decimal_network_identifier[i] + 1);
+        }else{
+            printf("%d", decimal_network_identifier[i]);
+            printf(".");
+        }
+    }
+    printf(" - ");
+    for (int i=0; i<4; i++){
+        if ( i == 3){
+            printf("%d", decimal_broadcast_identifier[i] - 1);
+        }else{
+            printf("%d", decimal_network_identifier[i]);
+            printf(".");
+        }
+    }
     printf("\n");
 
     return 0;
