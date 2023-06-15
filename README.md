@@ -6,7 +6,8 @@ Is written in **c**, so is fast.
 I am a terminal lover, and I like to create terminal to make my work easier, this is also a practise for me to learn more c language, so is possible that is not wrote in the most correct way, because I'm still learning c.
 
 **but works:**
+
 ![demo](media/demo.png)
 
-**If you find any bug or any part of the code can be wrote in a more correct way pls let me know :) **
+**If you find any bug or any part of the code can be wrote in a more correct way pls let me know :)**
 
