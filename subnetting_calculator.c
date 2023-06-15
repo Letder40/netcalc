@@ -101,6 +101,25 @@ int main() {
     printf("[?] netmask -> ");
     int** netmask_bits = get_ip();
 
+    // Checking if netmask is a valid one
+    int state = 1;
+    int state_change = 0;
+    for (int x=0; x<4; x++){
+        for (int i=0; i<8; i++){
+            if (state == 1 && netmask_bits[x][i] == 0) {
+                state = 0;
+                state_change ++;
+            }else if(state == 0 && netmask_bits[x][i] == 1){
+                state=1;
+                state_change++;
+            }
+        }
+    }
+    if (state_change > 1){
+        printf("[!] Invalid network mask\n");
+        return 1;
+    }
+
     int network_identifier[4][8];
     for (int x=0; x<4; x++){
         for (int i=0; i<8; i++){
@@ -126,7 +145,7 @@ int main() {
     printf("\n");
     free(ip_bits);
 
-    printf("[#] netmask               ");
+    printf("[#] network mask          ");
     for (int x=0; x<4; x++){
         for (int i=0; i<8; i++){
         printf("%d", netmask_bits[x][i]);  
