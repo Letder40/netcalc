@@ -6,6 +6,8 @@ int** get_ip(){
     int digit;
     int octet_index = 0;
 
+    // octects declaration
+
     struct Octet {
         int digits[4];
         int counter;
@@ -17,6 +19,7 @@ int** get_ip(){
     for (int i=0; i<=3; i++){
         octets[i].counter = 0;
     }
+    //
 
     while (1) {
         
@@ -25,14 +28,19 @@ int** get_ip(){
 
         digit = getchar();
 
+        // finish when digit = 10 ('\n') decimal representation in ascii
         if (digit == '\n') {
             break;
         }
+
+        // breaking ip address to another octect when the digit is equal to 46 ('.') decimal representation in ascii
 
         if (digit == '.') {
             octet_index++;
             continue;
         }
+
+        // Getting real int 
 
         digit = digit - '0';
 
@@ -102,6 +110,7 @@ int main() {
     int** netmask_bits = get_ip();
 
     // Checking if netmask is a valid one
+
     int state = 1;
     int state_change = 0;
     for (int x=0; x<4; x++){
@@ -115,10 +124,13 @@ int main() {
             }
         }
     }
+
     if (state_change > 1){
         printf("[!] Invalid network mask\n");
         return 1;
     }
+
+    // And operation network mask and ip address to get network identifier
 
     int network_identifier[4][8];
     for (int x=0; x<4; x++){
@@ -127,12 +139,16 @@ int main() {
         }
     }
 
+    // Or operation negated network mask or ip address to get broadcast identifier
+
     int broadcast_identifier[4][8];
     for (int x=0; x<4; x++){
         for (int i=0; i<8; i++){
             broadcast_identifier[x][i] = !netmask_bits[x][i] || ip_bits[x][i];
         }
     }
+
+    // printing binary representation
 
     printf("\n[ Binary representation ] \n");
 
@@ -170,6 +186,8 @@ int main() {
     }
     printf("\n");
 
+    // Getting decimal representation of network identifier, and broadcast identifier
+
     int decimal_network_identifier[4], decimal_broadcast_identifier[4];
     for (int x=0; x<4; x++){
         decimal_network_identifier[x] = 0;
@@ -196,6 +214,8 @@ int main() {
             counter++;
         }
     }
+
+    // Printing decimal representation
 
     printf("\n[ Decimal representation ] \n");
 
