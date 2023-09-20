@@ -3,25 +3,27 @@
 #include <math.h>
 #include <string.h>
 
-void print_network_range(int decimal_network_identifier[4], int decimal_broadcast_identifier[4]){
+void print_network_range(int network_identifier[4], int broadcast_identifier[4]){
+    network_identifier[3] += 1; 
+    broadcast_identifier[3] -= 1;
+
+    printf("[#] ");
     for (int i=0; i<4; i++){
-            if ( i == 3){
-                printf("%d", decimal_network_identifier[i] + 1);
-            }else{
-                printf("%d", decimal_network_identifier[i]);
-                printf(".");
-            }
+        if (i == 3) {
+            printf("%d", network_identifier[i]);
+        }else{
+            printf("%d.", network_identifier[i]);
         }
-        printf(" - ");
-        for (int i=0; i<4; i++){
-            if ( i == 3){
-                printf("%d", decimal_broadcast_identifier[i] - 1);
-            }else{
-                printf("%d", decimal_network_identifier[i]);
-                printf(".");
-            }
+    }
+    printf(" - ");
+    for (int i=0; i<4; i++){
+        if (i == 3) {
+            printf("%d", broadcast_identifier[i]);
+        }else{
+            printf("%d.", broadcast_identifier[i]);
         }
-        printf("\n");
+    }
+    printf("\n");
 }
 
 void free_multiarray(int** array){
@@ -63,24 +65,6 @@ void print_identifiers(char* header, int* decimal_address){
         printf("\n");
 }
 
-int* decimal_of_ip(int bytes[4][8]){
-    int *digits = malloc(sizeof(int) * 4);
-    int counter = 0;
-    for (int x=0; x<4; x++){
-        digits[x] = 0;
-        int counter = 0;
-        for (int i=7; i>=0; i--){
-            if (bytes[x][counter] == 0){
-                counter++;
-                continue;
-            }
-            digits[x] += pow(2, i); 
-            counter++;
-        }
-    }
-    return digits;
-}
-
 struct Octet {
     int digits[4];
     int counter;
@@ -91,8 +75,6 @@ int** get_ip(){
     int octet_index = 0;
 
     // octects declaration
-
-   
 
     struct Octet octets[4];
     struct Octet *octet_ptr;
@@ -260,6 +242,24 @@ int** address_to_bits(char* arg){
 
 }
 
+int* decimal_of_ip(int bytes[4][8]){
+    int *digits = malloc(sizeof(int) * 4);
+    int counter = 0;
+    for (int x=0; x<4; x++){
+        digits[x] = 0;
+        int counter = 0;
+        for (int i=7; i>=0; i--){
+            if (bytes[x][counter] == 0){
+                counter++;
+                continue;
+            }
+            digits[x] += pow(2, i); 
+            counter++;
+        }
+    }
+    return digits;
+}
+
 int main(int argv ,char** args) {
     int** netmask_bits;
     int** ip_bits;
@@ -348,10 +348,7 @@ int main(int argv ,char** args) {
     print_identifiers("[#] network identifier    ", decimal_network_identifier);
     print_identifiers("[#] broadcast identifier  ", decimal_broadcast_identifier);
 
-    // printing network range
-    
-    printf("\n[ Network valid range] \n[#] ");
-
+    printf("\n[ Netwrok range ] \n");
     print_network_range(decimal_network_identifier, decimal_broadcast_identifier);
 
     return 0;
