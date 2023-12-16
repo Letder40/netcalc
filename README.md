@@ -9,5 +9,5 @@ I am a terminal lover, and I like to create terminal software to make my work ea
 ```bash
 gcc ./src/netcalc.c -o netcalc
 ```
-
-
+## Preview
+![preview](./media/preview.png)
