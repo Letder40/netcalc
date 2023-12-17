@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 
     char ip_address[32] = {0};
     for (int i = 0; i<4; i++ ){
-        for (int j = 0; j<7; j++) {
+        for (int j = 0; j<8; j++) {
             int index = j + (8*i); 
             ip_address[index] = (numbers_ip[i] >> (7 - j)) & 1;
         }
