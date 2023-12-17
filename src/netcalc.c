@@ -3,48 +3,36 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* to_binarystr(char* ip) {
-    char* str_ip = malloc(40);
-    int str_ip_index = 0;
-    for (int i = 0; i<32; i++) {
-        str_ip[str_ip_index++] = ip[i] + '0';
-        if (i == 7 || i == 15 || i == 23) 
-            str_ip[str_ip_index++] = '.';
-    }
-
-    return str_ip;
-}
-
-char* to_decimalstr(char* ip) {
-    char* str_ip = malloc(16);
-    int str_ip_index = 0;
-    for (int i = 0; i<4; i++) {
-        int power = 1;
-        int decimal_ip = 0;
-
-        for (int j = 8 - 1; j>=0; j--) {
-            if (ip[j + i*8] == 1) {
-                decimal_ip += power;
-            }
-            power *= 2;
-        }
-
-        char temp[5];
-        sprintf(temp, "%d.", decimal_ip);
-        strcat(str_ip, temp);
-    }
-    str_ip[strlen(str_ip) - 1] = '\0';
-    return str_ip;
-}
+#include "subnetting.c"
 
 void help (FILE* fd) {
-    fprintf(fd, "Usage: sncalc [ip-addres/mask-prefix]\n");
+    fprintf(fd, "Usage:\nnetcalc {ip-addres/mask-prefix} [s]\n\nOPTIONS\n  -s subnetting mode\n");
 }
 
 int main(int argc, char** argv) {
-    if (argc != 2) {
+    if (argc < 2 || argc > 3) {
         help(stderr);
         return 1;
+    }
+
+    if (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-h")) {
+        help(stdout);
+        return 0;
+    }
+
+    if (strstr(argv[1], "/") == NULL || strlen(argv[1]) - 1 == strcspn(argv[1], "/") ){
+        help(stderr);
+        return 1;
+    }
+
+    int subnetting = 0;
+    if (argc == 3){
+        if (strcmp(argv[2], "-s")) {
+            help(stderr);
+            return 1;
+        }
+        printf("[#] Subnetting mode\n");
+        subnetting = 1;
     }
 
     char* string_ip = strtok(argv[1], "/");
@@ -76,8 +64,6 @@ int main(int argc, char** argv) {
 
     char ip_address[32] = {0};
     for (int i = 0; i<4; i++ ){
-        if(i != 0) {
-        }
         for (int j = 0; j<7; j++) {
             int index = j + (8*i); 
             ip_address[index] = (numbers_ip[i] >> (7 - j)) & 1;
@@ -91,6 +77,11 @@ int main(int argc, char** argv) {
         } else {
             netmask[i] = 0;
         }
+    }
+
+    if (subnetting == 1) {
+        vlsm(ip_address, netmask, prefix);
+        return 0;
     }
 
     char network_id[32] = {0};
@@ -115,5 +106,4 @@ int main(int argc, char** argv) {
 [#] Broadcast ID   %s\n\n\
 ", string_ip, to_decimalstr(netmask), to_decimalstr(network_id), to_decimalstr(broadcast_id), to_binarystr(ip_address), to_binarystr(netmask), to_binarystr(network_id), to_binarystr(broadcast_id)\
     );
-
 }
