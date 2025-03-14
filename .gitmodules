@@ -1,0 +1,3 @@
+[submodule "ctable"]
+	path = ctable
+	url = https://github.com/Letder40/ctable
