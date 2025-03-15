@@ -8,6 +8,10 @@ add_subdirectory(ctable)
 
 set(SOURCES
     src/main.c
+    src/args.c
+    src/print_network.c
+    src/vlsm.c
+    src/flsm.c
 )
 
 add_executable(netcalc ${SOURCES})
