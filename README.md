@@ -26,6 +26,16 @@ Examples
     netcalc -f 4 -b 192.168.1.0 255.255.255.0 → Performs FLSM with 4 subnets showing binary representation as well.
     netcalc -v 192.168.1.0 255.255.255.0 → Performs VLSM subnetting.
 ```
+## CTable - Custom ASCII Table Library  
+
+This project uses **CTable**, a lightweight and efficient open-source library that I developed for generating ASCII-printable tables. **CTable** simplifies the creation of structured text-based tables, making network calculations more readable.  
+
+Check out the project on [GitHub](https://github.com/Letder40/ctable) to explore its features or contribute!  
+
+### Tables
+![flsm example](media/flsm.png)
+
+![flsm binary example](media/flsm_bin.png)
 
 ## Compilation
 1. Using Build Script
