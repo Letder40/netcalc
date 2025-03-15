@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(netcalc)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE release)
 
 include_directories(include)
 add_subdirectory(ctable)
